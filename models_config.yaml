@@ -1,0 +1,272 @@
+# Model Configuration for Smart ETL Agentic AI System
+# This file contains all model configurations for easy customization
+
+# Foundation Models for Agents
+agent_models:
+  # Primary model for supervisor and collaborator agents
+  primary:
+    id: "anthropic.claude-3-sonnet-20240229-v1:0"
+    name: "Claude 3 Sonnet"
+    description: "Balanced performance and cost"
+    max_tokens: 4096
+    temperature: 0.7
+    
+  # Alternative models
+  alternatives:
+    - id: "anthropic.claude-3-haiku-20240307-v1:0"
+      name: "Claude 3 Haiku"
+      description: "Fast and cost-effective"
+      max_tokens: 4096
+      temperature: 0.7
+      
+    - id: "anthropic.claude-3-opus-20240229-v1:0"
+      name: "Claude 3 Opus"
+      description: "Most capable, higher cost"
+      max_tokens: 4096
+      temperature: 0.7
+      
+    - id: "amazon.nova-pro-v1:0"
+      name: "Amazon Nova Pro"
+      description: "AWS native model"
+      max_tokens: 5000
+      temperature: 0.7
+
+# Embedding Models for Knowledge Base
+embedding_models:
+  primary:
+    id: "amazon.titan-embed-text-v1"
+    name: "Titan Embeddings Text v1"
+    description: "Standard text embeddings"
+    dimensions: 1536
+    
+  alternatives:
+    - id: "amazon.titan-embed-text-v2:0"
+      name: "Titan Embeddings Text v2"
+      description: "Improved embeddings"
+      dimensions: 1024
+      
+    - id: "cohere.embed-english-v3"
+      name: "Cohere Embed English v3"
+      description: "High quality embeddings"
+      dimensions: 1024
+
+# Text Generation Models
+text_generation_models:
+  primary:
+    id: "anthropic.claude-3-sonnet-20240229-v1:0"
+    name: "Claude 3 Sonnet"
+    description: "Best for general text generation"
+    max_tokens: 4096
+    temperature: 0.7
+    
+  alternatives:
+    - id: "amazon.nova-pro-v1:0"
+      name: "Amazon Nova Pro"
+      description: "AWS native, good performance"
+      max_tokens: 5000
+      temperature: 0.7
+      
+    - id: "amazon.titan-text-premier-v1:0"
+      name: "Titan Text Premier"
+      description: "AWS Titan model"
+      max_tokens: 3000
+      temperature: 0.7
+      
+    - id: "meta.llama3-70b-instruct-v1:0"
+      name: "Llama 3 70B"
+      description: "Open source, powerful"
+      max_tokens: 2048
+      temperature: 0.7
+
+# Image Generation Models
+image_generation_models:
+  primary:
+    id: "amazon.titan-image-generator-v2:0"
+    name: "Titan Image Generator v2"
+    description: "Latest Titan image model"
+    max_images: 1
+    quality: "standard"
+    width: 512
+    height: 512
+    
+  alternatives:
+    - id: "amazon.titan-image-generator-v1"
+      name: "Titan Image Generator v1"
+      description: "Previous version"
+      max_images: 1
+      quality: "standard"
+      width: 512
+      height: 512
+      
+    - id: "stability.stable-diffusion-xl-v1"
+      name: "Stable Diffusion XL"
+      description: "High quality images"
+      max_images: 1
+      quality: "standard"
+      width: 1024
+      height: 1024
+
+# Knowledge Base Models
+knowledge_base_models:
+  retrieval:
+    id: "amazon.titan-text-premier-v1:0"
+    name: "Titan Text Premier"
+    description: "For KB retrieval and synthesis"
+    max_tokens: 3000
+    temperature: 0.3
+    
+  summarization:
+    id: "anthropic.claude-3-sonnet-20240229-v1:0"
+    name: "Claude 3 Sonnet"
+    description: "For document summarization"
+    max_tokens: 4096
+    temperature: 0.5
+
+# Model Parameters
+model_parameters:
+  # Agent invocation parameters
+  agent:
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2048
+    stop_sequences: []
+    
+  # Text generation parameters
+  text_generation:
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 250
+    max_tokens: 2048
+    
+  # Summarization parameters
+  summarization:
+    temperature: 0.3
+    top_p: 0.9
+    max_tokens: 1500
+    
+  # Code generation parameters
+  code_generation:
+    temperature: 0.2
+    top_p: 0.95
+    max_tokens: 2048
+    
+  # Creative writing parameters
+  creative:
+    temperature: 0.9
+    top_p: 0.95
+    max_tokens: 3000
+
+# Model Selection Strategy
+model_selection:
+  # Fallback strategy if primary model fails
+  fallback_enabled: true
+  fallback_order:
+    - "anthropic.claude-3-sonnet-20240229-v1:0"
+    - "amazon.nova-pro-v1:0"
+    - "amazon.titan-text-premier-v1:0"
+  
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    backoff_multiplier: 2
+    initial_delay_seconds: 1
+
+# Cost Optimization
+cost_optimization:
+  # Use cheaper models for simple tasks
+  simple_tasks_model: "anthropic.claude-3-haiku-20240307-v1:0"
+  complex_tasks_model: "anthropic.claude-3-sonnet-20240229-v1:0"
+  
+  # Token limits for cost control
+  max_tokens_per_request: 4096
+  max_requests_per_minute: 100
+
+# Model Capabilities Matrix
+model_capabilities:
+  "anthropic.claude-3-opus-20240229-v1:0":
+    text_generation: excellent
+    code_generation: excellent
+    reasoning: excellent
+    multilingual: excellent
+    cost: high
+    
+  "anthropic.claude-3-sonnet-20240229-v1:0":
+    text_generation: excellent
+    code_generation: excellent
+    reasoning: excellent
+    multilingual: excellent
+    cost: medium
+    
+  "anthropic.claude-3-haiku-20240307-v1:0":
+    text_generation: good
+    code_generation: good
+    reasoning: good
+    multilingual: good
+    cost: low
+    
+  "amazon.nova-pro-v1:0":
+    text_generation: excellent
+    code_generation: good
+    reasoning: good
+    multilingual: good
+    cost: medium
+    
+  "amazon.titan-text-premier-v1:0":
+    text_generation: good
+    code_generation: fair
+    reasoning: good
+    multilingual: fair
+    cost: low
+
+# Region-Specific Model Availability
+regional_availability:
+  us-east-1:
+    - "anthropic.claude-3-sonnet-20240229-v1:0"
+    - "anthropic.claude-3-haiku-20240307-v1:0"
+    - "anthropic.claude-3-opus-20240229-v1:0"
+    - "amazon.nova-pro-v1:0"
+    - "amazon.titan-text-premier-v1:0"
+    - "amazon.titan-embed-text-v1"
+    - "amazon.titan-image-generator-v2:0"
+    
+  us-west-2:
+    - "anthropic.claude-3-sonnet-20240229-v1:0"
+    - "anthropic.claude-3-haiku-20240307-v1:0"
+    - "amazon.nova-pro-v1:0"
+    - "amazon.titan-text-premier-v1:0"
+    - "amazon.titan-embed-text-v1"
+    
+  eu-west-1:
+    - "anthropic.claude-3-sonnet-20240229-v1:0"
+    - "anthropic.claude-3-haiku-20240307-v1:0"
+    - "amazon.titan-text-premier-v1:0"
+    - "amazon.titan-embed-text-v1"
+
+# Custom Model Configurations for Specific Use Cases
+use_case_models:
+  etl_operations:
+    model: "anthropic.claude-3-sonnet-20240229-v1:0"
+    temperature: 0.5
+    max_tokens: 2048
+    
+  document_analysis:
+    model: "anthropic.claude-3-sonnet-20240229-v1:0"
+    temperature: 0.3
+    max_tokens: 3000
+    
+  code_generation:
+    model: "anthropic.claude-3-sonnet-20240229-v1:0"
+    temperature: 0.2
+    max_tokens: 2048
+    
+  data_transformation:
+    model: "amazon.nova-pro-v1:0"
+    temperature: 0.4
+    max_tokens: 2048
+    
+  query_optimization:
+    model: "anthropic.claude-3-sonnet-20240229-v1:0"
+    temperature: 0.3
+    max_tokens: 1500
+
+# Made with Bob

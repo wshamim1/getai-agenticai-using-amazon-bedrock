@@ -124,29 +124,79 @@ class ResourceCleanup:
         try:
             collection_name = self.config.kb.collection_name
             
-            # Delete collection
+            # Delete collection first
             logger.info(f"Deleting OpenSearch collection: {collection_name}")
             self.opensearch_mgr.delete_collection(collection_name)
             time.sleep(5)
             
-            # Delete policies
+            # Delete all policies associated with the collection
+            # List and delete by pattern matching instead of hardcoded names
             logger.info("Deleting OpenSearch policies...")
-            self.opensearch_mgr.delete_security_policy(
-                f"{collection_name}-encryption",
-                'encryption'
-            )
-            self.opensearch_mgr.delete_security_policy(
-                f"{collection_name}-network",
-                'network'
-            )
-            self.opensearch_mgr.delete_access_policy(
-                f"{collection_name}-access"
-            )
+            self._delete_opensearch_policies(collection_name)
             
             logger.info("✅ OpenSearch cleanup completed")
             
         except Exception as e:
             logger.error(f"Error cleaning up OpenSearch: {e}")
+    
+    def _delete_opensearch_policies(self, collection_name: str):
+        """
+        Delete all OpenSearch policies associated with a collection
+        
+        Args:
+            collection_name: Name of the collection
+        """
+        try:
+            # Delete encryption policies
+            logger.info("Listing and deleting encryption policies...")
+            try:
+                response = self.config.aws.opensearch_client.list_security_policies(
+                    type='encryption',
+                    resource=[collection_name]
+                )
+                for policy in response.get('securityPolicySummaries', []):
+                    policy_name = policy['name']
+                    try:
+                        self.opensearch_mgr.delete_security_policy(policy_name, 'encryption')
+                    except Exception as e:
+                        logger.warning(f"Could not delete encryption policy '{policy_name}': {e}")
+            except Exception as e:
+                logger.warning(f"Error listing encryption policies: {e}")
+            
+            # Delete network policies
+            logger.info("Listing and deleting network policies...")
+            try:
+                response = self.config.aws.opensearch_client.list_security_policies(
+                    type='network',
+                    resource=[collection_name]
+                )
+                for policy in response.get('securityPolicySummaries', []):
+                    policy_name = policy['name']
+                    try:
+                        self.opensearch_mgr.delete_security_policy(policy_name, 'network')
+                    except Exception as e:
+                        logger.warning(f"Could not delete network policy '{policy_name}': {e}")
+            except Exception as e:
+                logger.warning(f"Error listing network policies: {e}")
+            
+            # Delete data access policies
+            logger.info("Listing and deleting data access policies...")
+            try:
+                response = self.config.aws.opensearch_client.list_access_policies(
+                    type='data',
+                    resource=[collection_name]
+                )
+                for policy in response.get('accessPolicySummaries', []):
+                    policy_name = policy['name']
+                    try:
+                        self.opensearch_mgr.delete_access_policy(policy_name)
+                    except Exception as e:
+                        logger.warning(f"Could not delete access policy '{policy_name}': {e}")
+            except Exception as e:
+                logger.warning(f"Error listing access policies: {e}")
+                
+        except Exception as e:
+            logger.error(f"Error deleting OpenSearch policies: {e}")
     
     def cleanup_lambda_functions(self):
         """Delete all Lambda functions"""

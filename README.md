@@ -6,7 +6,7 @@ A production-ready, enterprise-grade multi-agent AI system built on Amazon Bedro
 [![Python](https://img.shields.io/badge/Python-3.11+-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
----
+----
 
 ## 📑 Table of Contents
 

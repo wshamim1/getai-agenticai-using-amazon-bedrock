@@ -780,6 +780,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ⭐ Star this repo if you find it helpful!
 
-[Report Bug](https://github.com/your-repo/issues) · [Request Feature](https://github.com/your-repo/issues) · [Documentation](https://github.com/your-repo/wiki)
+[Report Bug](https://github.com/wshamim1/multi-agenticai-using-amazon-bedrock/issues) · [Request Feature](https://github.com/wshamim1/multi-agenticai-using-amazon-bedrock/issues) 
 
 </div>
